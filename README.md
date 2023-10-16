@@ -6,4 +6,4 @@
 
 只有 `ohya_bot.py` 還有 `bot_data/` 是我的東西
 
-其他都是discord.py pakage
+其他都是discord.py package
