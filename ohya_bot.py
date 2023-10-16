@@ -193,16 +193,17 @@ async def zhong(message):
             break
 
 async def default_react(message):
-    if message.channel.id==1162707874464682115: #哦鴨測機
-        pass
-    if message.author.id==764866433120206848: # 我
-        pass
-        # await message.add_reaction("<:hao:1163133973795446935>")
+    # if message.channel.id==1162707874464682115: #哦鴨測機
+    # if message.author.id==764866433120206848: # 我
     if message.author.id==844093945616269323: #arctan
         await message.add_reaction("<:hao:1163133973795446935>")
-    eights=["8","eight","八","8️⃣","８"]
+    without_mention=message.content.lower()
+    for member in message.guild.members:
+        without_mention=without_mention.replace(f"<@{member.id}>",f"{member.name}")
+    # print(without_mention)
+    eights=["8","eight","八","8️⃣","８","🎱"]
     for eight in eights:
-        if eight in message.content.lower():
+        if eight in without_mention:
             await message.add_reaction("8️⃣")
             break
 
