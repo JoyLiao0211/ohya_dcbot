@@ -191,21 +191,24 @@ async def zhong(message):
         if key in str:
             await message.add_reaction("🀄")
             break
-    
 
 async def default_react(message):
-    # if message.channel.id==1162707874464682115: #哦鴨測機
-    #     await message.add_reaction("🀄")
-    #     await message.channel.send("owo")
+    if message.channel.id==1162707874464682115: #哦鴨測機
+        pass
     if message.author.id==764866433120206848: # 我
-        return
+        pass
         # await message.add_reaction("<:hao:1163133973795446935>")
-    elif message.author.id==844093945616269323: #arctan
+    if message.author.id==844093945616269323: #arctan
         await message.add_reaction("<:hao:1163133973795446935>")
+    eights=["8","eight","八","8️⃣","８"]
+    for eight in eights:
+        if eight in message.content.lower():
+            await message.add_reaction("8️⃣")
+            break
 
 async def check_ver(message):
     if(message.content=="check ver"):
-        await message.channel.send("last upd: 23-10-17 13:21")
+        await message.channel.send("last upd: 23-10-17 14:26")
 
 intents = discord.Intents.default()
 intents.message_content = True
