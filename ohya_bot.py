@@ -195,7 +195,7 @@ async def zhong(message):
     for key in zhong_reply_map.keys():
         if key in str:
             await message.channel.send(zhong_reply_map[key])
-    zhong_react_list=["你要不要承認"]
+    zhong_react_list=["你要不要承認","表揚"]
     for key in zhong_react_list:
         if key in str:
             await message.add_reaction("🀄")
