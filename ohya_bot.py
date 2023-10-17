@@ -76,7 +76,7 @@ async def CFhandle(message):
     else:
         await message.channel.send(f"successfully set {message.author.name} 's handle to {message_list[1]}, time stamp: {t}")
 
-last=0
+last=-1
 async def Baluting_board(message):
     mes_list=message.content.split()
     if mes_list[0] != "!Baluting":
@@ -87,7 +87,7 @@ async def Baluting_board(message):
     if len(mes_list)==1:
         await message.channel.send("```\n"+welcome+cmd+"\n```")
         return
-    global last
+    
     if mes_list[1] == "post":
         if len(mes_list) != 4:
             await message.channel.send("wrong format! correct format:\n```\n!Baluting post <from> <content>\n```")
@@ -103,6 +103,10 @@ async def Baluting_board(message):
         with open("bot_data/baluting/board.txt","r") as file:
             board=eval(file.read())
         empty=False
+        global last
+        if last<0:
+            with open("bot_data/baluting/last.txt","r") as file:
+                last=int(file.read())
         for i in range(10):
             if board[(last+i)%10] == ["",""]:
                 board[(last+i)%10] = new_post
@@ -112,7 +116,8 @@ async def Baluting_board(message):
         if not empty:
             board[last]=new_post
             last=(last+1)%10
-            
+        with open("bot_data/baluting/last.txt","w") as file:
+            file.write(str(last))
         with open("bot_data/baluting/board.txt","w") as file:
             file.write(str(board))
         with open("bot_data/baluting/board_display.txt","w") as file:
@@ -140,7 +145,7 @@ async def XXlee(message):
     str=message.content.lower()
     for XX in XXlst:
         if XX in str:
-            await message.channel.send("https://media.discordapp.net/attachments/1159739169996812342/1159739748148052038/ezgif-1-fa359b3a1a.gif?ex=65321ece&is=651fa9ce&hm=65ca5f62d04aa6f1807bd30c8c7f9d240856cc60b41f17a336e760b99abac83e&=&width=800&height=800")
+            await message.channel.send("https://media.discordapp.net/attachments/1159739169996812342/1159739748148052038/ezgif-1-fa359b3a1a.gif?ex=65321ece&is=651fa9ce&hm=65ca5f62d04aa6f1807bd30c8c7f9d240856cc60b41f17a336e760b99abac83e&")
             return
 
 distribution={}
@@ -152,7 +157,7 @@ async def pick_someone(message):
     if message.author.id not in distribution:
         distribution[message.author.id]=10
     distribution[message.author.id]+=0.3
-    print(f"distribution[{message.author.name}]={distribution[message.author.id]}")
+    # print(f"distribution[{message.author.name}]={distribution[message.author.id]}")
     if message.content == "抽到我的機率":
         await message.channel.send(f"抽到 {message.author.name} 的機率是 {int(distribution[message.author.id])/10} %")
     elif "抽一個人" in message.content:
@@ -171,6 +176,7 @@ async def pick_someone(message):
         file.write(str(distribution))
 
 async def pick_me(message):
+    message_content=message.content.replace("ㄌ","了")
     if "抽到我了" not in message.content:
         return
     await message.channel.send(f"抽到 <@{message.author.id}> 了",allowed_mentions=discord.AllowedMentions(users=False))
@@ -180,7 +186,10 @@ async def zhong(message):
         "需要解釋":"# 我需要解釋",
         "我不知道":"# 我不知道",
         "教授對不起":"# 教授對不起",
-        "我不會git":"# 我不會ＧＩＴ"
+        "我不會git":"# 我不會ＧＩＴ",
+        "施廣霖":"# 施～廣～霖～",
+        "施~廣~霖~":"# 施～廣～霖～",
+        "施～廣～霖":"# 施～廣～霖～"
     }
     str=message.content.lower()
     for key in zhong_reply_map.keys():
@@ -194,18 +203,31 @@ async def zhong(message):
 
 async def default_react(message):
     # if message.channel.id==1162707874464682115: #哦鴨測機
+    #     await message.channel.send("https://tenor.com/view/shake-head-anime-bocchi-the-rock-bocchi-the-rock-gif-bocchi-gif-27212768")
     # if message.author.id==764866433120206848: # 我
     if message.author.id==844093945616269323: #arctan
         await message.add_reaction("<:hao:1163133973795446935>")
-    without_mention=message.content.lower()
+    str=(message.content).lower()
     for member in message.guild.members:
-        without_mention=without_mention.replace(f"<@{member.id}>",f"{member.name}")
-    # print(without_mention)
+        str=str.replace(f"<@{member.id}>",f"{member.display_name}")
+    for emoji in message.guild.emojis:
+        str=str.replace(f"{emoji.id}","")
+    # print(str)
+    if message.author.id==527891741055909910: #cheissmart ,"妻","漆","欺","棲","戚","淒"
+        P7=["7","７","七","seven","柒","闖關","⑦"]
+        for p7 in P7:
+            if p7 in str:
+                await message.channel.send("https://tenor.com/view/shake-head-anime-bocchi-the-rock-bocchi-the-rock-gif-bocchi-gif-27212768")
+                break
     eights=["8","eight","八","8️⃣","８","🎱"]
     for eight in eights:
-        if eight in without_mention:
+        if eight in str:
             await message.add_reaction("8️⃣")
             break
+    sadge=["封鎖"]
+    for sad in sadge:
+        if sad in str:
+            await message.add_reaction("😢")
 
 async def check_ver(message):
     if(message.content=="check ver"):
@@ -224,6 +246,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    # print(f"{message.author.display_name}, {message.author.global_name}, {message.author.name}")
     # if message.channel.id != 1162707874464682115: #哦鴨測機
     #     return
     # print("測機")
