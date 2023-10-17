@@ -1,9 +1,10 @@
 # sharing
 
-這裡放**哦鴨的BOT**的扣
+這裡放 **哦鴨的BOT** 的扣
 
 我應該沒有不小心把token也commit上來?
 
-只有 `ohya_bot.py` 還有 `bot_data/` 是我的東西
+## 哦鴨的Todo-list
 
-其他都是discord.py package
+- [ ] CF handle verifier
+- [ ] 乞丐超人：自動爬FB便當文，即時通知
