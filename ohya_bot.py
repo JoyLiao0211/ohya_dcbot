@@ -155,7 +155,10 @@ async def default_react(message):
     # print(str)
     if message.author.id==527891741055909910: #cheissmart ,"妻","漆","欺","棲","戚","淒"
         P7=["p7","seven","闖關","cco"]
+        P7_2=["p", "7","闖", "關"]
         if sum([1 if p7 in str else 0 for p7 in P7]) > 0:
+            await message.channel.send("https://tenor.com/view/shake-head-anime-bocchi-the-rock-bocchi-the-rock-gif-bocchi-gif-27212768")
+        elif sum([1 if p7 in str else 0 for p7 in P7_2]) > 1:
             await message.channel.send("https://tenor.com/view/shake-head-anime-bocchi-the-rock-bocchi-the-rock-gif-bocchi-gif-27212768")
     
     cp8w=["8w"]
