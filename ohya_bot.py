@@ -2,10 +2,15 @@ import discord
 import numpy
 import os
 import random
+import datetime
+
+"================================================================================="
 
 last_message={}
 async def check_3_same_message(message):
     global last_message
+    if message.author==client.user:
+        last_message[message.channel]=["",0]
     if message.channel not in last_message:
         last_message[message.channel]=[message.content,1]
     elif message.content==last_message[message.channel][0]:
@@ -136,6 +141,10 @@ async def default_react(message):
     # if message.channel.id==1162707874464682115: #哦鴨測機
     #     await message.channel.send("https://tenor.com/view/shake-head-anime-bocchi-the-rock-bocchi-the-rock-gif-bocchi-gif-27212768")
     # if message.author.id==764866433120206848: # 我
+    #     await message.add_reaction("8️⃣")
+    #     await message.add_reaction("🇼")
+    #     await message.add_reaction("🇨")
+    #     await message.add_reaction("🇵")
     if message.author.id==844093945616269323: #arctan
         await message.add_reaction("<:hao:1163133973795446935>")
     str=(message.content).lower()
@@ -145,42 +154,88 @@ async def default_react(message):
         str=str.replace(f"{emoji.id}","")
     # print(str)
     if message.author.id==527891741055909910: #cheissmart ,"妻","漆","欺","棲","戚","淒"
-        P7=["7","７","七","seven","柒","闖關","⑦"]
-        for p7 in P7:
-            if p7 in str:
-                await message.channel.send("https://tenor.com/view/shake-head-anime-bocchi-the-rock-bocchi-the-rock-gif-bocchi-gif-27212768")
-                break
+        P7=["p7","seven","闖關","cco"]
+        if sum([1 if p7 in str else 0 for p7 in P7]) > 0:
+            await message.channel.send("https://tenor.com/view/shake-head-anime-bocchi-the-rock-bocchi-the-rock-gif-bocchi-gif-27212768")
+    
+    cp8w=["8w"]
+    if (message.author.id==364761561866174465 and "wiwi" in str) or (message.author.id==331730758555402240 and "8e7" in str) or sum([1 if cp in str else 0 for cp in cp8w]) > 0:
+        await message.add_reaction("8️⃣")
+        await message.add_reaction("🇼")
+        await message.add_reaction("🇨")
+        await message.add_reaction("🇵")
+        return
     eights=["8","eight","八","8️⃣","８","🎱"]
-    for eight in eights:
-        if eight in str:
-            await message.add_reaction("8️⃣")
-            break
+    no_eights=["8w"]
+    if sum([1 if eight in str else 0 for eight in eights]) > 0 and sum([1 if noteight in str else 0 for noteight in no_eights]) == 0:
+        await message.add_reaction("8️⃣")
+    
     sadge=["封鎖"]
-    for sad in sadge:
-        if sad in str:
-            await message.add_reaction("😢")
+    if sum([1 if sad in str else 0 for sad in sadge]) > 0:
+        await message.add_reaction("😢")
 
+
+async def upd_cf_roles(guild):
+    from bot_data import cf
+    import time
+    with open("bot_data/handle/handle.txt","r") as f:
+        handle_map=eval(f.read())
+    role_ids=[1164186643129970789,1164186598338998342,1164186553606733824]
+    roles=[guild.get_role(roid) for roid in role_ids]
+    for member in guild.members:
+        if member.id not in handle_map:
+            continue
+        rating=-1
+        while rating<0:
+            time.sleep(0.3)
+            rating=cf.get_rating(handle_map[member.id]["handle"])
+        # if handle_map[member.id]["rating"] == rating:
+        #     continue
+        handle_map[member.id]["rating"]=rating
+        lst=[False,False,False]
+        if rating >= 2100:
+            lst[2]=True
+        elif rating >= 1900:
+            lst[1]=True
+        elif rating >= 1600:
+            lst[0]=True
+        for i in range(3):
+            if lst[i]:
+                await member.add_roles(roles[i])
+            elif not lst[i]:
+                await member.remove_roles(roles[i])
+        print(member.name,lst,rating)
+    with open("bot_data/handle/handle.txt","w") as f:
+        f.write(str(handle_map))
+
+"================================================================================="
+
+last_upd_time=None
 async def check_ver(message):
     if(message.content=="check ver"):
-        await message.channel.send("last upd: 23-10-18 14:27")
+        await message.channel.send(f"last upd: {last_upd_time}")
 
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
+intents.guilds = True
 client = discord.Client(intents = intents)
 
 @client.event
 async def on_ready():
+    global last_upd_time
+    last_upd_time=datetime.datetime.now().replace(microsecond=0)
     print("on ready")
 
 @client.event
 async def on_message(message):
-    
     # print(f"{message.author.display_name}, {message.author.global_name}, {message.author.name}")
-    # if message.channel.id != 1162707874464682115: #哦鴨測機
-    #     return
-    # print("測機")
+    if message.channel.id == 1162707874464682115: #哦鴨測機
+        print("測機")
+    # return
     if message.author==client.user:
+        global last_message
+        last_message[message.channel]=["",0]
         return
     if message.channel.id==1162757642045903009: # CF手把
         await CFhandle(message)
@@ -201,9 +256,13 @@ async def on_message(message):
     await XXlee(message)
     await zhong(message)
     await default_react(message)
+
     
 
-TOKEN=""
-with open("../data.txt","r") as data:
-    TOKEN=eval(data.read())["TOKEN"]
-client.run(TOKEN)
+if __name__ == "__main__":
+    TOKEN=""
+    with open("../data.txt","r") as data:
+        TOKEN=eval(data.read())["TOKEN"]
+    client.run(TOKEN)
+    print("owo??")
+
