@@ -171,7 +171,7 @@ async def default_react(message):
             await message.channel.send("https://tenor.com/view/shake-head-anime-bocchi-the-rock-bocchi-the-rock-gif-bocchi-gif-27212768")
         elif sum([1 if p7 in str else 0 for p7 in P7_2]) > 1:
             await message.channel.send("https://tenor.com/view/shake-head-anime-bocchi-the-rock-bocchi-the-rock-gif-bocchi-gif-27212768")
-        elif sum([1 if p7 in last_che_str else 0 for p7 in P7_st]) > 0 and sum([1 if p7 in last_che_str else 0 for p7 in P7_ed]) > 0:
+        elif sum([1 if p7 in last_che_str else 0 for p7 in P7_st]) > 0 and sum([1 if p7 in str else 0 for p7 in P7_ed]) > 0:
             await message.channel.send("https://tenor.com/view/shake-head-anime-bocchi-the-rock-bocchi-the-rock-gif-bocchi-gif-27212768")
         last_che_message = message
     
