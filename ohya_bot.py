@@ -137,6 +137,7 @@ async def zhong(message):
             await message.add_reaction("🀄")
             break
 
+last_che_message = None
 async def default_react(message):
     # if message.channel.id==1162707874464682115: #哦鴨測機
     #     await message.channel.send("https://tenor.com/view/shake-head-anime-bocchi-the-rock-bocchi-the-rock-gif-bocchi-gif-27212768")
@@ -154,12 +155,25 @@ async def default_react(message):
         str=str.replace(f"{emoji.id}","")
     # print(str)
     if message.author.id==527891741055909910: #cheissmart ,"妻","漆","欺","棲","戚","淒"
+        global last_che_message
+        last_che_str = ""
+        if last_che_message is not None:
+            last_che_str = (last_che_message.content).lower();
+            for member in message.guild.members:
+                last_che_str=last_che_str.replace(f"<@{member.id}>",f"{member.display_name}")
+            for emoji in message.guild.emojis:
+                last_che_str=last_che_str.replace(f"{emoji.id}","")
         P7=["p7","seven","闖關","cco"]
         P7_2=["p", "7","闖", "關"]
+        P7_st=["p", "闖"]
+        P7_ed=["7", "關"]
         if sum([1 if p7 in str else 0 for p7 in P7]) > 0:
             await message.channel.send("https://tenor.com/view/shake-head-anime-bocchi-the-rock-bocchi-the-rock-gif-bocchi-gif-27212768")
         elif sum([1 if p7 in str else 0 for p7 in P7_2]) > 1:
             await message.channel.send("https://tenor.com/view/shake-head-anime-bocchi-the-rock-bocchi-the-rock-gif-bocchi-gif-27212768")
+        elif sum([1 if p7 in last_che_str else 0 for p7 in P7_st]) > 0 and sum([1 if p7 in last_che_str else 0 for p7 in P7_ed]) > 0:
+            await message.channel.send("https://tenor.com/view/shake-head-anime-bocchi-the-rock-bocchi-the-rock-gif-bocchi-gif-27212768")
+        last_che_message = message
     
     cp8w=["8w"]
     if (message.author.id==364761561866174465 and "wiwi" in str) or (message.author.id==331730758555402240 and "8e7" in str) or sum([1 if cp in str else 0 for cp in cp8w]) > 0:
