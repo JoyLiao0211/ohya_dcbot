@@ -6,5 +6,5 @@
 
 ## 哦鴨的Todo-list
 
-- [ ] CF handle verifier
+- [v] CF handle verifier
 - [ ] 乞丐超人：自動爬FB便當文，即時通知
