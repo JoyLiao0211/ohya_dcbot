@@ -32,14 +32,6 @@ async def check_yegebomb(message):
     if yege[message.channel] >= len(yege_str):
         yege[message.channel] = 0
 
-async def pick_someone_old(message):
-    if "抽一個人" not in message.content:
-        return
-    members=message.guild.members
-    member_cnt=len(message.guild.members)
-    i=numpy.random.randint(0,member_cnt)
-    await message.channel.send(f"抽到 <@{members[i].id}> 了")
-
 async def QQhahaha(message):
     QQ=["qq","QQ","qQ","Qq","哭哭"]
     for Q in QQ:
@@ -48,96 +40,35 @@ async def QQhahaha(message):
             return
 
 async def CFhandle(message):
-    if message.channel.id!=1162757642045903009: #CF手把
-        return
+    from bot_data import cf
     message_list=message.content.split()
-    if len(message_list)!=2 or message_list[0]!="!CFhandle":
-        await message.channel.send("fail")
-        return
-    handle={}
-    with open("bot_data/handle/time.txt","r") as time:
-        t=int(time.read())
-    with open(f"bot_data/handle/handle_{t}.txt","r") as file:
-        handle=eval(file.read())
-    overwrite=False
-    prehandle=""
-    if message.author.id in handle:
-        # global overwrite,prehandle
-        overwrite=True
-        prehandle=handle[message.author.id]
-    handle[message.author.id]=message_list[1]
-    t+=1
-    with open(f"bot_data/handle/handle_{t}.txt","w") as file:
-        file.write(str(handle))
-    with open("bot_data/handle/time.txt","w") as time:
-        time.write(str(t))
-    if overwrite:
-        await message.channel.send(f"successfully overwrite {message.author.name} 's handle from {prehandle} to {message_list[1]}, time stamp: {t}")
+    if message_list[0]=="set":
+        if len(message_list)<2:
+            await message.channel.send("wrong format! correct format:```set <handle>```")
+            return
+        await message.channel.send(cf.send_request(message.author.id,message_list[1]))
+    elif message_list[0]=="verify":
+        await message.channel.send(cf.check(message.author.id))
     else:
-        await message.channel.send(f"successfully set {message.author.name} 's handle to {message_list[1]}, time stamp: {t}")
+        await message.channel.send("wrong format! correct format:```set <handle>```or```verify```")
 
-last=-1
 async def Baluting_board(message):
     mes_list=message.content.split()
     if mes_list[0] != "!Baluting":
         return
-    welcome="===============================\nWelcome to CSIE Baluting board!\n===============================\n"
-    line="===============================\n"
-    cmd="Please enter your command (post/pull/exit):"
+    from bot_data import baluting as bl
     if len(mes_list)==1:
-        await message.channel.send("```\n"+welcome+cmd+"\n```")
+        await message.channel.send(bl.enter())
         return
-    
     if mes_list[1] == "post":
         if len(mes_list) != 4:
             await message.channel.send("wrong format! correct format:\n```\n!Baluting post <from> <content>\n```")
             return
-        maxl=100
-        if len(mes_list[2])>maxl:
-            mes_list[2]=mes_list[2][:maxl]
-        if len(mes_list[3])>maxl:
-            mes_list[3]=mes_list[3][:maxl]
-        mes_list[2]=mes_list[2].replace("`","ˋ")
-        mes_list[3]=mes_list[3].replace("`","ˋ")
-        new_post=[mes_list[2],mes_list[3]]
-        with open("bot_data/baluting/board.txt","r") as file:
-            board=eval(file.read())
-        empty=False
-        global last
-        if last<0:
-            with open("bot_data/baluting/last.txt","r") as file:
-                last=int(file.read())
-        for i in range(10):
-            if board[(last+i)%10] == ["",""]:
-                board[(last+i)%10] = new_post
-                last=(last+i+1)%10
-                empty=True
-                break
-        if not empty:
-            board[last]=new_post
-            last=(last+1)%10
-        with open("bot_data/baluting/last.txt","w") as file:
-            file.write(str(last))
-        with open("bot_data/baluting/board.txt","w") as file:
-            file.write(str(board))
-        with open("bot_data/baluting/board_display.txt","w") as file:
-            file.write("```\n")
-            file.write(welcome)
-            for i in range(10):
-                if board[i]!=["",""]:
-                    file.write("From: "+board[i][0]+"\n")
-                    file.write("Content:\n"+board[i][1]+"\n")
-            file.write(line)
-            file.write("```\n")
-        await message.channel.send("success post!")
-        return
+        await message.channel.send(bl.post(mes_list[2],mes_list[3]))
     elif mes_list[1] == "pull":
-        with open("bot_data/baluting/board_display.txt","r") as file:
-            board_content=file.read()
-        await message.channel.send(board_content)
+        await message.channel.send(bl.pull())
     elif mes_list[1] == "exit":
-        exit_message=["# THERE IS NO EXIT","# JUST BALUTING"]
-        await message.channel.send(exit_message[numpy.random.randint(len(exit_message))])
+        await message.channel.send(bl.exit())
 
 async def XXlee(message):
     XXlst=["xx","XX","插","好日子"]
@@ -231,14 +162,12 @@ async def default_react(message):
 
 async def check_ver(message):
     if(message.content=="check ver"):
-        await message.channel.send("last upd: 23-10-17 14:26")
+        await message.channel.send("last upd: 23-10-18 14:27")
 
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 client = discord.Client(intents = intents)
-# server = None
-
 
 @client.event
 async def on_ready():
@@ -246,18 +175,21 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    
     # print(f"{message.author.display_name}, {message.author.global_name}, {message.author.name}")
     # if message.channel.id != 1162707874464682115: #哦鴨測機
     #     return
     # print("測機")
     if message.author==client.user:
         return
+    if message.channel.id==1162757642045903009: # CF手把
+        await CFhandle(message)
+        return
     if len(message.content)==0:
         return
     if message.channel.id==1157685969135345785: # 重要訊息
         return
     await check_3_same_message(message)
-    await CFhandle(message)
     await check_ver(message)
     if message.channel.id==1141778910955180032: # 真的依某
         return
