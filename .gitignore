@@ -1,6 +1,4 @@
-*
-!ohya_bot.py
-!README.md
-!bot_data
-!.gitignore
-!upd_handle.py
+__pycache__
+testing.py
+pull_ws2.sh
+.gitignore
