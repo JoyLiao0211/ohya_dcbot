@@ -2,7 +2,11 @@ import codeforces_api as cf
 import numpy as np
 import datetime
 
-cp=cf.CodeforcesApi ()
+cp=cf.CodeforcesApi()
+
+def handle_exist(handle:str):
+    return True
+    # todo
 
 def get_rating(handle:str):
     try:
@@ -31,7 +35,7 @@ def gen_contest_id():
             return contest.id
 
 def send_request(user_id:int,handle:str):
-    if get_rating(handle) < 0:
+    if not handle_exist(handle):
         return "handle does not exist"
     request={}
     request["handle"]=handle

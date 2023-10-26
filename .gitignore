@@ -1,4 +1,5 @@
 __pycache__
 testing.py
 pull_ws2.sh
+push_ws2.sh
 .gitignore
