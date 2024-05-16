@@ -1,1 +1,0 @@
-{603400864857718838: {'handle': 'BurnedChicken', 'contest': 1742, 'time': datetime.datetime(2023, 10, 18, 21, 43, 39, 726824)}, 531136458317365258: {'handle': 'baluteshih', 'contest': 1715, 'time': datetime.datetime(2023, 10, 18, 21, 46, 5, 50005)}, 615166433793540111: {'handle': 'shimeming', 'contest': 1811, 'time': datetime.datetime(2023, 10, 19, 15, 33, 55, 19897)}}
