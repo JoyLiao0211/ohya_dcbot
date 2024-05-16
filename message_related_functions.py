@@ -187,8 +187,8 @@ async def upd_cf_roles(guild): # 沒在維護
 
 
 async def default_react(message):
-    if message.channel.id==1168203729267326986: #支語database
-        await message.add_reaction("🇨🇳")
+    # if message.channel.id==1168203729267326986: #支語database
+    #     await message.add_reaction("🇨🇳")
     if message.channel.id in [1217743906582827049,1162707874464682115]: # 投稿圖片, 測機
         if message.content!="" and len(message.attachments)==1:
             await message.add_reaction("✅")
