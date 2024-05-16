@@ -1,1 +1,0 @@
-[['a', 'b'], ['b', 'c'], ['哦鴨', '我的baluting_board真ㄉ沒有bug'], ['a', 'b'], ['甲', '乙'], ['測', '<-----------last位置在這'], ['che', '這裡可以躲bot嗎P7'], ['owo', 'ow---o'], ['uwu', 'owo'], ['哦鴨', '我的baluting_board真ㄉ沒有bug']]
